@@ -1,0 +1,13 @@
+name: Contact Form
+version: 1.0.0
+description: "Yet another contact form implementation"
+icon: envelope-o
+author:
+  name: Yalin Gunayer
+  email: yalin.gunayer@gmail.com
+  url: http://yalingunayer.com
+homepage: https://github.com/nunopress/grav-plugin-simplecontact
+demo: http://grav-demo.nunopress.com/
+keywords: contact, plugin
+bugs: https://github.com/nunopress/grav-plugin-simplecontact/issues
+license: MIT

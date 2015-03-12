@@ -1,0 +1,18 @@
+title: Yalin Gunayer
+author:
+  name: Yalin Gunayer
+  email: 'yalin.gunayer@gmail.com'
+blog:
+  route: ''
+metadata:
+    description: 'Yalin''s blog about programming and gaming'
+taxonomies: [category,tag,month]
+menu:
+  - icon: twitter
+    url: http://twitter.com/ygunayer
+  - icon: github
+    url: http://github.com/ygunayer
+  - icon: facebook
+    url: http://facebook.com/Yalin.Gunayer
+  - icon: linkedin
+    url: http://tr.linkedin.com/in/ygunayer

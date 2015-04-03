@@ -1,6 +1,6 @@
 ---
 title: Real-Time Data Delivery on Spring Boot Using ActiveMQ and STOMP over WebSockets - Part 2
-date: 21:41 03/24/2015 
+date: 07:00 04/03/2015 
 taxonomy:
     category: blog
     tag: [java, spring boot, activemq, websocket, javascript]

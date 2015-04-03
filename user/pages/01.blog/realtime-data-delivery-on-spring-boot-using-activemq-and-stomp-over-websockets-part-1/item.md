@@ -11,7 +11,7 @@ The traditional approach to handing out clients data in real-time (or quasi-real
 
 This article will demonstrate a simple guestbook app that uses the WebSocket method, and will feature [Spring Boot](http://projects.spring.io/spring-boot/) and [STOMP](https://stomp.github.io/) on the server side, and [SockJS](https://github.com/sockjs/sockjs-client) and [stomp.js](http://jmesnil.net/stomp-websocket/doc/) on the client side.
 
-To download the code for the project, visit the Github repository I created for this article: [https://github.com/ygunayer/realtime-guestbook](https://github.com/ygunayer/realtime-guestbook)
+>>>>>> For a downloadable version of this code visit the Github repository at [https://github.com/ygunayer/realtime-guestbook](https://github.com/ygunayer/realtime-guestbook)
 
 First, let me quickly explain what ```STOMP``` is.  As you might already know, WebSocket is a pretty low-level transport mechanism, so in order to do RPC over WebSocket you have to roll your own message format, both for the call and for the result. This might be tricky and time-consuming, especially on the serialization part, and ```STOMP```, which stands for *Streaming Text Oriented Messaging Protocol*, aims to fix this very problem by defining a few commands. The ```spring-messaging``` package provides the necessary classes to implement this protocol, so we'll be using that to simplify our work. If you're interested in more information on STOMP, visit the [STOMP website](https://stomp.github.io/) or the relevant [Wikipedia page](http://en.wikipedia.org/wiki/Streaming_Text_Oriented_Messaging_Protocol).
 
@@ -164,3 +164,5 @@ And, that's it! Here's a simple demonstration using two different browser window
 </video>
 
 As you can see, these messages are global so everyone can see them. To protect these messages, we'll be using STOMP's user-scoped message delivery utilities to target specific users in the next article, so please stay tuned!
+
+>>>>>> Update: The next article is up! Read it at here: [Real-Time Data Delivery on Spring Boot Using ActiveMQ and STOMP over WebSockets - Part 2"](/blog/realtime-data-delivery-on-spring-boot-using-activemq-and-stomp-over-websockets-part-1 "Real-Time Data Delivery on Spring Boot Using ActiveMQ and STOMP over WebSockets - Part 2")

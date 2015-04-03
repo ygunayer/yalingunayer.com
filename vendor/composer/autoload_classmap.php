@@ -339,6 +339,7 @@ return array(
     'RocketTheme\\Toolbox\\File\\PhpFile' => $vendorDir . '/rockettheme/toolbox/File/src/PhpFile.php',
     'RocketTheme\\Toolbox\\File\\YamlFile' => $vendorDir . '/rockettheme/toolbox/File/src/YamlFile.php',
     'RocketTheme\\Toolbox\\ResourceLocator\\ResourceLocatorInterface' => $vendorDir . '/rockettheme/toolbox/ResourceLocator/src/ResourceLocatorInterface.php',
+    'RocketTheme\\Toolbox\\ResourceLocator\\UniformResourceIterator' => $vendorDir . '/rockettheme/toolbox/ResourceLocator/src/UniformResourceIterator.php',
     'RocketTheme\\Toolbox\\ResourceLocator\\UniformResourceLocator' => $vendorDir . '/rockettheme/toolbox/ResourceLocator/src/UniformResourceLocator.php',
     'RocketTheme\\Toolbox\\Session\\Message' => $vendorDir . '/rockettheme/toolbox/Session/src/Message.php',
     'RocketTheme\\Toolbox\\Session\\Session' => $vendorDir . '/rockettheme/toolbox/Session/src/Session.php',

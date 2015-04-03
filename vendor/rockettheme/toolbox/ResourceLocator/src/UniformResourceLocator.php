@@ -30,9 +30,21 @@ class UniformResourceLocator implements ResourceLocatorInterface
 
     public function __construct($base = null)
     {
-        $this->base = rtrim($base ?: getcwd(), '/');
+        // Normalize base path.
+        $this->base = rtrim(str_replace('\\', '/', $base ?: getcwd()), '/');
     }
 
+    /**
+     * Return iterator for the resource URI.
+     *
+     * @param  string $uri
+     * @param  int    $flags    See constants from FilesystemIterator class.
+     * @return UniformResourceIterator
+     */
+    public function getIterator($uri, $flags)
+    {
+        return new UniformResourceIterator($uri, $flags, $this);
+    }
 
     /**
      * Reset locator by removing all the schemes.
@@ -70,8 +82,8 @@ class UniformResourceLocator implements ResourceLocatorInterface
                 // Support stream lookup in 'theme://path/to' format.
                 $list[] = explode('://', $path, 2);
             } else {
-                // Support relative paths.
-                $path = trim($path, '/');
+                // Support relative paths (after normalization).
+                $path = trim(str_replace('\\', '/', $path), '/');
                 if (file_exists("{$this->base}/{$path}")) {
                     $list[] = $path;
                 }
@@ -136,7 +148,7 @@ class UniformResourceLocator implements ResourceLocatorInterface
     }
 
     /**
-     * @param $uri
+     * @param  string $uri
      * @return string|bool
      * @throws \BadMethodCallException
      */
@@ -145,7 +157,7 @@ class UniformResourceLocator implements ResourceLocatorInterface
         if (!is_string($uri)) {
             throw new \BadMethodCallException('Invalid parameter $uri.');
         }
-        return $this->find($uri, false, true, false);
+        return $this->findCached($uri, false, true, false);
     }
 
     /**
@@ -162,7 +174,7 @@ class UniformResourceLocator implements ResourceLocatorInterface
         if (!is_string($uri)) {
             throw new \BadMethodCallException('Invalid parameter $uri.');
         }
-        return $this->find($uri, false, $absolute, $first);
+        return $this->findCached($uri, false, $absolute, $first);
     }
 
     /**
@@ -179,7 +191,29 @@ class UniformResourceLocator implements ResourceLocatorInterface
         if (!is_string($uri)) {
             throw new \BadMethodCallException('Invalid parameter $uri.');
         }
-        return $this->find($uri, true, $absolute, $all);
+
+        return $this->findCached($uri, true, $absolute, $all);
+    }
+
+    /**
+     * Find all instances from a list of resources.
+     *
+     * @param  array  $uris     Input URIs to be searched.
+     * @param  bool   $absolute Whether to return absolute path.
+     * @param  bool   $all      Whether to return all paths even if they don't exist.
+     * @throws \BadMethodCallException
+     * @return array
+     */
+    public function mergeResources(array $uris, $absolute = true, $all = false)
+    {
+        $uris = array_unique($uris);
+
+        $list = [];
+        foreach ($uris as $uri) {
+            $list = array_merge($list, $this->findResources($uri, $absolute, $all));
+        }
+
+        return $list;
     }
 
     /**
@@ -207,8 +241,24 @@ class UniformResourceLocator implements ResourceLocatorInterface
         return [$scheme, $file];
     }
 
+
+    protected function findCached($uri, $array, $absolute, $all)
+    {
+        // Local caching: make sure that the function gets only called at once for each file.
+        $key = $uri .'@'. (int) $array . (int) $absolute . (int) $all;
+
+        if (!isset($this->cache[$key])) {
+            list ($scheme, $file) = $this->parseResource($uri);
+
+            $this->cache[$key] = $this->find($scheme, $file, $array, $absolute, $all);
+        }
+
+        return $this->cache[$key];
+    }
+
     /**
-     * @param  string|array $uri
+     * @param  string $scheme
+     * @param  string $file
      * @param  bool $array
      * @param  bool $absolute
      * @param  bool $all
@@ -217,23 +267,8 @@ class UniformResourceLocator implements ResourceLocatorInterface
      * @return array|string|bool
      * @internal
      */
-    protected function find($uri, $array, $absolute, $all)
+    protected function find($scheme, $file, $array, $absolute, $all)
     {
-        if (is_string($uri)) {
-            // Local caching: make sure that the function gets only called at once for each file.
-            $key = $uri .'@'. (int) $array . (int) $absolute . (int) $all;
-
-            if (isset($this->cache[$key])) {
-                return $this->cache[$key];
-            }
-
-            list ($scheme, $file) = $this->parseResource($uri);
-
-        } else {
-            // Accept also internal $uri format: [scheme, file].
-            list ($scheme, $file) = $uri;
-        }
-
         if (!isset($this->schemes[$scheme])) {
             throw new \InvalidArgumentException("Invalid resource {$scheme}://");
         }
@@ -244,38 +279,34 @@ class UniformResourceLocator implements ResourceLocatorInterface
                 continue;
             }
 
+            // Remove prefix from filename.
+            $filename = '/' . trim(substr($file, strlen($prefix)), '\/');
+
             foreach ($paths as $path) {
-                $filePath = '/' . ltrim(substr($file, strlen($prefix)), '\/');
                 if (is_array($path)) {
                     // Handle scheme lookup.
-                    $path[1] = trim($path[1] . $filePath, '/');
-                    $found = $this->find($path, $array, $absolute, $all);
+                    $relPath = trim(trim($path[1], '/') . $filename, '/');
+                    $found = $this->find($path[0], $relPath, $array, $absolute, $all);
                     if ($found) {
                         if (!$array) {
-                            $results = $found;
-                            break 2;
+                            return $found;
                         }
                         $results = array_merge($results, $found);
                     }
                 } else {
                     // Handle relative path lookup.
-                    $path = trim($path . $filePath, '/');
-                    $lookup = $this->base . '/' . $path;
+                    $relPath = trim($path . $filename, '/');
+                    $fullPath = $this->base . '/' . $relPath;
 
-                    if ($all || file_exists($lookup)) {
-                        $current = $absolute ? $lookup : $path;
+                    if ($all || file_exists($fullPath)) {
+                        $current = $absolute ? $fullPath : $relPath;
                         if (!$array) {
-                            $results = $current;
-                            break 2;
+                            return $current;
                         }
                         $results[] = $current;
                     }
                 }
             }
-        }
-
-        if (isset($key)) {
-            $this->cache[$key] = $results;
         }
 
         return $results;

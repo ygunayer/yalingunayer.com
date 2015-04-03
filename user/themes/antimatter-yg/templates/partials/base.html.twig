@@ -14,6 +14,7 @@
         {% do assets.addCss('theme://css/custom.css',100) %}
         {% do assets.addCss('theme://css/font-awesome.min.css',100) %}
         {% do assets.addCss('theme://css/slidebars.min.css') %}
+        {% do assets.addCss('theme://css/github.css') %}
         {% if browser.getBrowser == 'msie' and browser.getVersion == 10 %}
             {% do assets.addCss('theme://css/nucleus-ie10.css') %}
         {% endif %}
@@ -30,6 +31,7 @@
         {% do assets.addJs('theme://js/modernizr.custom.71422.js',100) %}
         {% do assets.addJs('theme://js/antimatter.js') %}
         {% do assets.addJs('theme://js/slidebars.min.js') %}
+        {% do assets.addJs('theme://js/highlight.pack.js') %}
     {% endblock %}
     {{ assets.js() }}
 
@@ -87,6 +89,7 @@
             hideControlClasses: true,
             scrollLock: true
           });
+          hljs.initHighlightingOnLoad();
         });
     });
     </script>

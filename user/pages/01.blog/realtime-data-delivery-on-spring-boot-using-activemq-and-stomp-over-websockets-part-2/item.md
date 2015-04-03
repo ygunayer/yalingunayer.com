@@ -6,7 +6,7 @@ taxonomy:
     tag: [java, spring boot, activemq, websocket, javascript]
 ---
 
-In the [previous article](/realtime-data-delivery-on-spring-boot-using-activemq-and-stomp-over-websockets-part-1 "Real-Time Data Delivery on Spring Boot Using ActiveMQ and STOMP over WebSockets - Part 1") we made a very simple app that sent updates to clients in real-time, and in this article, we'll build on that example and make a slightly more complicated app; a private messaging app.
+In the [previous article](/blog/realtime-data-delivery-on-spring-boot-using-activemq-and-stomp-over-websockets-part-1 "Real-Time Data Delivery on Spring Boot Using ActiveMQ and STOMP over WebSockets - Part 1") we made a very simple app that sent updates to clients in real-time, and in this article, we'll build on that example and make a slightly more complicated app; a private messaging app.
 
 In the first example messages were broadcast to all client, but this time we'll authenticate users with ```Spring Security``` and target them specifically by using STOMP's user-specific methods. We'll also use a message queue (namely, ```Apache ActiveMQ```, which **must be installed on your computer**) to temporarily store messages before sending them out. And as for the transport between the queue and our message dispatchers, we'll use ```Apache Camel```.
 

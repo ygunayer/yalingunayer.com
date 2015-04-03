@@ -165,4 +165,4 @@ And, that's it! Here's a simple demonstration using two different browser window
 
 As you can see, these messages are global so everyone can see them. To protect these messages, we'll be using STOMP's user-scoped message delivery utilities to target specific users in the next article, so please stay tuned!
 
->>>>>> Update: The next article is up! Read it at here: [Real-Time Data Delivery on Spring Boot Using ActiveMQ and STOMP over WebSockets - Part 2"](/blog/realtime-data-delivery-on-spring-boot-using-activemq-and-stomp-over-websockets-part-1 "Real-Time Data Delivery on Spring Boot Using ActiveMQ and STOMP over WebSockets - Part 2")
+>>>>>> Update: The next article is up! Read it at here: [Real-Time Data Delivery on Spring Boot Using ActiveMQ and STOMP over WebSockets - Part 2"](/blog/realtime-data-delivery-on-spring-boot-using-activemq-and-stomp-over-websockets-part-2 "Real-Time Data Delivery on Spring Boot Using ActiveMQ and STOMP over WebSockets - Part 2")
